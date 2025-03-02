@@ -1,7 +1,7 @@
 #!/bin/bash
 # Code by Yuval Dar 
 
-set -x
+# set -x
 
 ##### Const #######
 readonly ASCII="text/plain"
@@ -75,13 +75,17 @@ echo "Remaining arguments: $@"
 # case 3: if file_name=="fc-*" - check if time stamp is older than t_flag_value and delete if so
 # case 4: if unknowntype - count it
 freespace_command() {
-    for cur_file in "$@"; do
+    local files_list=("$@")
+    local inside_files=()
+
+    for cur_file in "${files_list[@]}"; do
         file_type=$(file --mime-type -b "${cur_file}") 
 
+        case $file_type in
         # case 1: ASCII
         $ASCII)
             print_if_verbose "ASCII file: ${cur_file}"
-            zip -q "${cur_file}.zip" "${cur_file}"
+            zip -qq "${cur_file}.zip" "${cur_file}"
             mv "${cur_file}.zip" "fc-${cur_file}"
             rm "${cur_file}"
             ;;
