@@ -118,9 +118,9 @@ freespace_command() {
                 time_diff=$((current_time - file_time))
 
                 # debug:
-                echo "file_time: $file_time"
-                echo "current_time: $current_time"
-                echo "time_diff: $time_diff"
+                # echo "file_time: $file_time"
+                # echo "current_time: $current_time"
+                # echo "time_diff: $time_diff"
                 
                 # check if the time difference is greater than the t_flag_value
                 if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
