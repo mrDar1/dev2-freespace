@@ -9,7 +9,7 @@ current_time=$(date +"%Y-%m-%d %H:%M:%S")
 # Loop to create 10 files and set timestamps decreasing by 10 hours
 for i in {1..10}
 do
-    filename="file$i"
+    filename="file${i}"
     touch "$filename"
     echo "yuval testing file number $i" > "$filename"
 
@@ -21,7 +21,7 @@ do
     timestamp=$(date -d "$current_time -$(( (i-1) * 10 )) hours" +"%Y%m%d%H%M")
 
     # set file timestamp to the updated one
-    touch -t "$timestamp" "$filename"
+    touch -t "$timestamp" "$zip_name"
 
     # echo "Created $filename with timestamp: $(date -d "$current_time -$(( (i-1) * 10 )) hours" +"%Y-%m-%d %H:%M:%S")"
 done
