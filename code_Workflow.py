@@ -12,13 +12,32 @@ def Workflow:
             -r
             -t - if not added number default is 48 hourst add MACRO.
 
-    if classic case - simple text file: 
-        zip it and change name as instructed.
-        then, delete the original file.
-    if directory:
-        check if -r flag is set, else exit.
-    if any other type :
-        rename file - to fc-<filename> and exit.
+
+
+    def iterate over files:
+        find_type.
+        cur_file
+
+        case simple text:
+            zip it and change name as instructed.
+            then, delete the original file.
+        case directory:
+            check if -r flag is set if so enter, else exit.
+        case cur_file == fc-*:
+            check time stamp.
+            if time stamp bigger than 48 - delete.
+        case cur_file != fc-*:
+            case zip:
+            case buzip:
+            case gzip:
+            case compressed:
+            rename file: to fc-<filename>
+            update time stamp with "touch"
+        
+        case *:
+            counte how many unkown types.
+        if any other type:
+            count as unkown type.
 
     
 
