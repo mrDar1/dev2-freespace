@@ -62,13 +62,6 @@ done
 # remove the flags from the arguments
 shift $((OPTIND-1))
 
-#debug:
-# echo "is_recursive: $is_recursive"
-# echo "is_verbose: $is_verbose"
-# echo "t_flag_value: $t_flag_value"
-# echo "Remaining arguments: $@"
-
-
 # traverse all files and check the compression type with "file" command:
 # case 1: ASCII zip it and rename to fc-<filename> and delete the original
 # case 2: compress type - check if the file name is in the right format and if not rename it, and update time stamp with touch.
@@ -90,13 +83,6 @@ freespace_command() {
             mv "${cur_file}.zip" "fc-${cur_file}.zip"
             rm "${cur_file}"
             ;;
-        # $BZIP2 | $COMPRESS | $GZIP | $ZIP)
-        #     if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
-        #         print_if_verbose "this file no-good with prefix format: ${cur_file}"
-        #         touch "${cur_file}" #update time stamp
-        #         mv "${cur_file}" "${NAMING_PREFIX}${cur_file}"
-        #     fi
-        #     ;;&
         $DIRECTORY)
             print_if_verbose "Enter Directory: ${cur_file}"
 
@@ -117,11 +103,6 @@ freespace_command() {
                 # calculate the difference
                 time_diff=$((current_time - file_time))
 
-                # debug:
-                # echo "file_time: $file_time"
-                # echo "current_time: $current_time"
-                # echo "time_diff: $time_diff"
-                
                 # check if the time difference is greater than the t_flag_value
                 if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
                     print_if_verbose "delete file: ${cur_file}"
