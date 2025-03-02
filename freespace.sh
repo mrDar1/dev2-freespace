@@ -13,6 +13,7 @@ readonly DIRECTORY="inode/directory"
 readonly PURPLE_BACKGROUND="\e[45m"
 readonly RESET_COLOR="\e[0m"
 readonly BOLD="\e[1;37m"
+readonly NAMING_FORMAT="fc-*"
 ###################
 
 ########### Helpers ###########
@@ -100,6 +101,25 @@ freespace_command() {
                 popd > /dev/null 2>&1
             fi
             ;;
+        $NAMING_FORMAT)
+            print_if_verbose "this file at right name format: ${cur_file}"
+            # get the time stamp of the file
+            file_time=$(stat -c %Y "${cur_file}")
+            # get the current time
+            current_time=$(date +%s)
+            # calculate the difference
+            time_diff=$((current_time - file_time))
+
+            echo file_time: $file_time
+            echo current_time: $current_time
+            echo "time_diff: $time_diff"
+            
+            # # check if the time difference is greater than the t_flag_value
+            # if [ $time_diff -gt $t_flag_value ]; then
+            #     print_if_verbose "delete file: ${cur_file}"
+            #     rm "${cur_file}"
+            # fi
+            # ;;
         *)
             print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
             ((count_unkown_types++))
