@@ -9,7 +9,7 @@ readonly ZIP="application/zip"
 readonly DIRECTORY="inode/directory"
 readonly RESET_COLOR="\e[0m"
 readonly BOLD="\e[1;37m"
-readonly NAMING_PREFIX="fc-*"
+readonly NAMING_PREFIX="fc-"
 ###################
 
 ########### Helpers ###########
@@ -59,12 +59,6 @@ done
 # remove the flags from the arguments
 shift $((OPTIND-1))
 
-
-# traverse all files and check the compression type with "file" command:
-# case 1: if ASCII zip it and rename to fc-<filename> and delete the original
-# case 2: if directory - check if recursive flag is on and if so, call function again
-# case 3: if file_name=="fc-*" - check if time stamp is older than t_flag_value and delete if so
-# case 4: if unknowntype - count it
 freespace_command() {
     local files_list=("$@")
     local inside_files=()
@@ -73,14 +67,19 @@ freespace_command() {
         file_type=$(file --mime-type -b "${cur_file}") 
 
         case $file_type in
-        # case 1: ASCII
         $ASCII)
             print_if_verbose "zip ASCII file: ${cur_file}"
             zip -qq "${cur_file}.zip" "${cur_file}"
             mv "${cur_file}.zip" "fc-${cur_file}.zip"
             rm "${cur_file}"
             ;;
-        # case 1: directory
+        $BZIP2 | $COMPRESS | $GZIP | $ZIP)
+            if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
+                print_if_verbose "this file no-good with prefix format: ${cur_file}"
+                touch "${cur_file}"
+                mv "${cur_file}" "${NAMING_PREFIX}${cur_file}"
+            fi
+            ;;
         $DIRECTORY)
             print_if_verbose "Enter Directory: ${cur_file}"
 
@@ -91,28 +90,31 @@ freespace_command() {
                 popd > /dev/null 2>&1
             fi
             ;;
-        $NAMING_PREFIX)
-            print_if_verbose "this file at right name format: ${cur_file}"
-            # get the time stamp of the file
-            file_time=$(stat -c %Y "${cur_file}")
-            # get the current time
-            current_time=$(date +%s)
-            # calculate the difference
-            time_diff=$((current_time - file_time))
+        *)
+            if [[ "$cur_file" == ${NAMING_PREFIX}* ]]; then
+                print_if_verbose "this file at right name prefix format: ${cur_file}"
+                # get the time stamp of the file
+                file_time=$(stat -c %Y "${cur_file}")
+                # get the current time
+                current_time=$(date +%s)
+                # calculate the difference
+                time_diff=$((current_time - file_time))
 
-            echo file_time: $file_time
-            echo current_time: $current_time
-            echo "time_diff: $time_diff"
-            
-            # # check if the time difference is greater than the t_flag_value
-            if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
-                print_if_verbose "delete file: ${cur_file}"
-                rm "${cur_file}"
+                # debug:
+                echo "file_time: $file_time"
+                echo "current_time: $current_time"
+                echo "time_diff: $time_diff"
+                
+                # check if the time difference is greater than the t_flag_value
+                if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
+                    print_if_verbose "delete file: ${cur_file}"
+                    rm "${cur_file}"
+                fi
+            else
+                print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
+                ((count_unkown_types++))
             fi
             ;;
-        *)
-            print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
-            ((count_unkown_types++))
         esac
     done
 }
