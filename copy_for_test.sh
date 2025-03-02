@@ -1,7 +1,4 @@
 #!/bin/bash
-# Code by Yuval Dar 
-
-# set -x
 
 ##### Const #######
 readonly ASCII="text/plain"
@@ -10,7 +7,6 @@ readonly COMPRESS="application/x-compress"
 readonly GZIP="application/gzip"
 readonly ZIP="application/zip"
 readonly DIRECTORY="inode/directory"
-readonly PURPLE_BACKGROUND="\e[45m"
 readonly RESET_COLOR="\e[0m"
 readonly BOLD="\e[1;37m"
 readonly NAMING_PREFIX="fc-*"
@@ -63,12 +59,6 @@ done
 # remove the flags from the arguments
 shift $((OPTIND-1))
 
-#debug:
-# echo "is_recursive: $is_recursive"
-# echo "is_verbose: $is_verbose"
-# echo "t_flag_value: $t_flag_value"
-# echo "Remaining arguments: $@"
-
 
 # traverse all files and check the compression type with "file" command:
 # case 1: if ASCII zip it and rename to fc-<filename> and delete the original
@@ -102,7 +92,7 @@ freespace_command() {
             fi
             ;;
         $NAMING_PREFIX)
-            print_if_verbose "this file at right name prefix: ${cur_file}"
+            print_if_verbose "this file at right name format: ${cur_file}"
             # get the time stamp of the file
             file_time=$(stat -c %Y "${cur_file}")
             # get the current time
@@ -114,7 +104,7 @@ freespace_command() {
             echo current_time: $current_time
             echo "time_diff: $time_diff"
             
-            # check if the time difference is greater than the t_flag_value
+            # # check if the time difference is greater than the t_flag_value
             if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
                 print_if_verbose "delete file: ${cur_file}"
                 rm "${cur_file}"
