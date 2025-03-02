@@ -1,6 +1,8 @@
 #!/bin/bash
 # Code by Yuval Dar 
 
+# set -x
+
 ##### Const #######
 readonly ASCII="text/plain"
 readonly BZIP2="application/x-bzip2"
@@ -34,7 +36,7 @@ fi
 # add command flags and exit if invalid flag entered
 is_verbose=false
 is_recursive=false
-t_value=48
+t_flag_value=48 # default value
 while getopts "rv" opt; do
     case $opt in
         r)
@@ -44,13 +46,23 @@ while getopts "rv" opt; do
             is_verbose=true
             ;;
         t)
-            t_value="$OPTARG" # Set the user-provided value
+            # make sure argument is a number
+            if [[ ! "$OPTARG" =~ ^[0-9]+$ ]]; then
+                echo "Error: -t flag requires a numeric argument."
+                exit 1
+            fi
+            t_flag_value="$OPTARG" # Set the user-provided value
             ;;
         \?)
             echo "Invalid option: -${opt}" >&2
             exit 1
             ;;
     esac
-    # remove the flags from the arguments
-    shift $((OPTIND-1))
 done
+# remove the flags from the arguments
+shift $((OPTIND-1))
+
+echo "is_recursive: $is_recursive"
+echo "is_verbose: $is_verbose"
+echo "t_flag_value: $t_flag_value"
+echo "Remaining arguments: $@"
