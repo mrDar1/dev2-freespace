@@ -84,9 +84,9 @@ freespace_command() {
         case $file_type in
         # case 1: ASCII
         $ASCII)
-            print_if_verbose "ASCII file: ${cur_file}"
+            print_if_verbose "zip ASCII file: ${cur_file}"
             zip -qq "${cur_file}.zip" "${cur_file}"
-            mv "${cur_file}.zip" "fc-${cur_file}"
+            mv "${cur_file}.zip" "fc-${cur_file}.zip"
             rm "${cur_file}"
             ;;
         # case 1: directory
@@ -100,9 +100,10 @@ freespace_command() {
                 popd > /dev/null 2>&1
             fi
             ;;
-        else
+        *)
+            print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
             ((count_unkown_types++))
-        fi
+        esac
     done
 }
 
