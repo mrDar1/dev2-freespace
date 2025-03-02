@@ -1,6 +1,6 @@
 #!/bin/bash
 # create 10 zip files the first 5 newer than 48 hours and the last 5 older than 48 hours
-# so the first 5 should not delete the last 5 should be deleted
+# create 5 more reguar files 3 newer than 48 hours and 2 older than 48 hours
 
 # Function to update the timestamp
 update_time_stamp() {
@@ -11,8 +11,12 @@ update_time_stamp() {
         echo $(date -d "-1 days" +"%Y%m%d%H%M")
     elif [ $i -le 7 ]; then
         echo $(date -d "-3 days" +"%Y%m%d%H%M")
-    else
+    elif [ $i -le 10 ]; then
         echo $(date -d "-4 days" +"%Y%m%d%H%M")
+    elif [ $i -le 13 ]; then
+        echo $(date -d "-1 days" +"%Y%m%d%H%M")
+    else
+        echo $(date -d "-3 days" +"%Y%m%d%H%M")    
     fi
 }
 
@@ -36,6 +40,21 @@ do
     timestamp=$(update_time_stamp "$i")
     # set file timestamp to the updated one
     touch -t "$timestamp" "$zip_name"
+
+    # echo "Created $filename with timestamp: $(date -d "$current_time -$(( (i-1) * 10 )) hours" +"%Y-%m-%d %H:%M:%S")"
+done
+
+# create 5 files, 3 newer than 48 hours and 2 older than 48 hours
+for i in {11..15}
+do
+    filename="file${i}"
+    touch "$filename"
+
+    echo "yuval testing file number $i" > "$filename"
+
+    timestamp=$(update_time_stamp "$i")
+    # set file timestamp to the updated one
+    touch -t "$timestamp" "$filename"
 
     # echo "Created $filename with timestamp: $(date -d "$current_time -$(( (i-1) * 10 )) hours" +"%Y-%m-%d %H:%M:%S")"
 done
