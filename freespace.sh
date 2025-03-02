@@ -101,28 +101,30 @@ freespace_command() {
                 popd > /dev/null 2>&1
             fi
             ;;
-        $NAMING_PREFIX)
-            print_if_verbose "this file at right name prefix: ${cur_file}"
-            # get the time stamp of the file
-            file_time=$(stat -c %Y "${cur_file}")
-            # get the current time
-            current_time=$(date +%s)
-            # calculate the difference
-            time_diff=$((current_time - file_time))
+        *)
+            if [[ "$cur_file" == ${NAMING_PREFIX}* ]]; then
+                print_if_verbose "this file at right name prefix format: ${cur_file}"
+                # get the time stamp of the file
+                file_time=$(stat -c %Y "${cur_file}")
+                # get the current time
+                current_time=$(date +%s)
+                # calculate the difference
+                time_diff=$((current_time - file_time))
 
-            echo file_time: $file_time
-            echo current_time: $current_time
-            echo "time_diff: $time_diff"
-            
-            # check if the time difference is greater than the t_flag_value
-            if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
-                print_if_verbose "delete file: ${cur_file}"
-                rm "${cur_file}"
+                echo "file_time: $file_time"
+                echo "current_time: $current_time"
+                echo "time_diff: $time_diff"
+                
+                # check if the time difference is greater than the t_flag_value
+                if [ $time_diff -gt $((t_flag_value * 3600)) ]; then
+                    print_if_verbose "delete file: ${cur_file}"
+                    rm "${cur_file}"
+                fi
+            else
+                print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
+                ((count_unkown_types++))
             fi
             ;;
-        *)
-            print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
-            ((count_unkown_types++))
         esac
     done
 }
