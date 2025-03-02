@@ -13,7 +13,7 @@ do
     touch "$filename"
 
     # calculate timestamp: decrease by (i-1) * 10 hours
-    timestamp=$(date -d "$current_time $((-(i-1)*10)) hours" +"%Y%m%d%H%M")
+    timestamp=$(date -d "$((-(i-1)*10)) hours ago" +"%Y%m%d%H%M.%S")
 
     echo "yuval testing file number $i" > "$filename"
     echo "fake time stamp is: ${timestamp}" >> "$filename"
