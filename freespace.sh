@@ -90,13 +90,13 @@ freespace_command() {
             mv "${cur_file}.zip" "fc-${cur_file}.zip"
             rm "${cur_file}"
             ;;
-        $BZIP2 | $COMPRESS | $GZIP | $ZIP)
-            if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
-                print_if_verbose "this file no-good with prefix format: ${cur_file}"
-                touch "${cur_file}" #update time stamp
-                mv "${cur_file}" "${NAMING_PREFIX}${cur_file}"
-            fi
-            ;;
+        # $BZIP2 | $COMPRESS | $GZIP | $ZIP)
+        #     if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
+        #         print_if_verbose "this file no-good with prefix format: ${cur_file}"
+        #         touch "${cur_file}" #update time stamp
+        #         mv "${cur_file}" "${NAMING_PREFIX}${cur_file}"
+        #     fi
+        #     ;;&
         $DIRECTORY)
             print_if_verbose "Enter Directory: ${cur_file}"
 
