@@ -11,14 +11,15 @@ for i in {1..10}
 do
     filename="file${i}"
     touch "$filename"
+
+    # calculate timestamp: decrease by (i-1) * 10 hours
+    timestamp=$(date -d "$current_time -$(( (i-1) * 10 )) hours" +"%Y%m%d%H%M")
     echo "yuval testing file number $i" > "$filename"
+    echo "fake time stamp is: ${timestamp}" > "$filename"
 
     zip_name="fc-${filename}.zip"
     zip "$zip_name" "$filename"
     rm "$filename"
-
-    # calculate timestamp: decrease by (i-1) * 10 hours
-    timestamp=$(date -d "$current_time -$(( (i-1) * 10 )) hours" +"%Y%m%d%H%M")
 
     # set file timestamp to the updated one
     touch -t "$timestamp" "$zip_name"
