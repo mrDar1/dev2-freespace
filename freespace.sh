@@ -101,7 +101,7 @@ freespace_command() {
             fi
             ;;
         *)
-            if [[ "$file_type" == "$BZIP2" -o "$file_type" == "$COMPRESS" -o "$file_type" == "$GZIP" -o "$file_type" == "$ZIP" ]]; then
+            if [[ "$file_type" == "$BZIP2" || "$file_type" == "$COMPRESS" || "$file_type" == "$GZIP" || "$file_type" == "$ZIP" ]]; then
                 if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
                     print_if_verbose "this file no-good with prefix format: ${cur_file}"
                     touch "${cur_file}" #update time stamp
