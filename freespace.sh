@@ -37,7 +37,7 @@ fi
 is_verbose=false
 is_recursive=false
 t_flag_value=48 # default value
-while getopts "rvt:" opt; do
+while getopts "rvt:" opt; do # t: means t flag requires an argument
     case $opt in
         r)
             is_recursive=true
@@ -71,9 +71,9 @@ shift $((OPTIND-1))
 
 # traverse all files and check the compression type with "file" command:
 # case 1: ASCII zip it and rename to fc-<filename> and delete the original
-# case 2: compress type - check if the file name is in the right format and if not rename it, and update time stamp with touch.
-# case 3: directory - check if recursive flag is on and if so, call function again
-# case 3: anything else:
+# case 2: directory - check if recursive flag is on and if so, call function again
+# case 34: anything else:
+#           if compress type - check if the file name is in the right format and if not rename it, and update time stamp with touch.
 #           if file_name=="fc-*" - check if time stamp is older than t_flag_value and delete if so
 #           if unknowntype - just count it
 freespace_command() {
