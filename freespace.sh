@@ -101,13 +101,7 @@ freespace_command() {
             fi
             ;;
         *)
-            if [[ "$file_type" == "$BZIP2" || "$file_type" == "$COMPRESS" || "$file_type" == "$GZIP" || "$file_type" == "$ZIP" ]]; then
-                if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
-                    print_if_verbose "this file no-good with prefix format: ${cur_file}"
-                    touch "${cur_file}" #update time stamp
-                    mv "${cur_file}" "${NAMING_PREFIX}${cur_file}"
-                fi
-            elif [[ "$cur_file" == ${NAMING_PREFIX}* ]]; then
+            if [[ "$cur_file" == ${NAMING_PREFIX}* ]]; then
                 print_if_verbose "this file at right name prefix format: ${cur_file}"
                 # get the time stamp of the file
                 file_time=$(stat -c %Y "${cur_file}")
@@ -126,6 +120,12 @@ freespace_command() {
                     print_if_verbose "delete file: ${cur_file}"
                     rm "${cur_file}"
                 fi
+            elif [[ "$file_type" == "$BZIP2" || "$file_type" == "$COMPRESS" || "$file_type" == "$GZIP" || "$file_type" == "$ZIP" ]]; then
+                if [[ "$cur_file" != ${NAMING_PREFIX}* ]]; then
+                    print_if_verbose "this file no-good with prefix format: ${cur_file}"
+                    touch "${cur_file}" #update time stamp
+                    mv "${cur_file}" "${NAMING_PREFIX}${cur_file}"
+                fi
             else
                 print_if_verbose "cant freespace: ${cur_file} do not support: ${file_type} " >&2
                 ((count_unkown_types++))
@@ -137,3 +137,5 @@ freespace_command() {
 
 count_unkown_types=0
 freespace_command "$@"
+print_if_verbose "Number of unknown files: ${count_unkown_types}"
+exit 0
