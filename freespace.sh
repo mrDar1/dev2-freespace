@@ -10,8 +10,9 @@ readonly COMPRESS="application/x-compress"
 readonly GZIP="application/gzip"
 readonly ZIP="application/zip"
 readonly DIRECTORY="inode/directory"
-readonly RESET_COLOR="\e[0m"
+
 readonly BOLD="\e[1;37m"
+readonly RESET_COLOR="\e[0m"
 readonly NAMING_PREFIX="fc-"
 ###################
 
@@ -51,7 +52,7 @@ while getopts "rvt:" opt; do # t: means t flag requires an argument
                 echo "Error: -t flag requires a numeric argument."
                 exit 1
             fi
-            t_flag_value="$OPTARG" # Set the user-provided value
+            t_flag_value="$OPTARG" # set user-provided value
             ;;
         \?)
             echo "Invalid option: -${opt}" >&2
