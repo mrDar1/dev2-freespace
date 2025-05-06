@@ -73,10 +73,16 @@
         -e Enables interpretation of escape sequences (like \n, \t, etc.).
         color wont work without it!
     
+    zip -qq "${cur_file}.zip" "${cur_file}"
+    mv "${cur_file}.zip" "fc-${cur_file}.zip"
+    ==== 
+    zip -qq "fc-${cur_file}.zip" "${cur_file}"
+        both are same!! different syntax
+
     $*    
         All arguments passed to the script/function, as a single space-separated string.
     $#	
-        Number of arguments passed to the script or function.
+        Number of arguments passed to the script or function (not include name $0).
 
     freespace_command "$@"
         "$@"   
